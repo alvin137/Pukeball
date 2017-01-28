@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter.Yellow;
 
-import alvin137.pukeball.NBTKEYS;
+import alvin137.pukeball.NBTKeys;
+import alvin137.pukeball.PukeBall;
 import alvin137.pukeball.entity.EntityPukeBall;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +31,7 @@ public class ItemPukeBall extends Item {
 
 	public ItemPukeBall() {
 		setUnlocalizedName(name);
-		setRegistryName(name);
+		setRegistryName(PukeBall.MODID, name);
 		GameRegistry.register(this);
 	}
 
@@ -52,8 +53,7 @@ public class ItemPukeBall extends Item {
 			worldIn.spawnEntityInWorld(entitypukeball);
 			NBTTagCompound nbt = itemStackIn.getTagCompound();
 			if (nbt != null) {
-				entitypukeball.getEntityData().setTag(NBTKEYS.KEY_ENTITY, nbt.getTag(NBTKEYS.KEY_ENTITY));
-				entitypukeball.getEntityData().setTag(NBTKEYS.KEY_ENTITY_NAME, nbt.getTag(NBTKEYS.KEY_ENTITY_NAME));
+				entitypukeball.getEntityData().setTag(NBTKeys.KEY_ENTITY, nbt.getTag(NBTKeys.KEY_ENTITY));
 			}
 		}
 
@@ -68,7 +68,7 @@ public class ItemPukeBall extends Item {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean par4) {
-		if (itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey(NBTKEYS.KEY_ENTITY_NAME, 8))
-			list.add(TextFormatting.YELLOW + itemstack.getTagCompound().getString(NBTKEYS.KEY_ENTITY_NAME));
+		if (itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey(NBTKeys.KEY_ENTITY_NAME, 8))
+			list.add(TextFormatting.YELLOW + itemstack.getTagCompound().getString(NBTKeys.KEY_ENTITY_NAME));
 	}
 }

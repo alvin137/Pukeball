@@ -22,19 +22,19 @@ public class PukeBall {
 
 	@Instance
 	public static PukeBall pukeball;
-	
-	@SidedProxy(clientSide="alvin137.pukeball.proxy.ClientProxy", serverSide="alvin137.pukeball.proxy.CommonProxy")
+
+	@SidedProxy(clientSide = "alvin137.pukeball.proxy.ClientProxy", serverSide = "alvin137.pukeball.proxy.CommonProxy")
 	public static CommonProxy proxy;
 
 	@EventHandler
 	public static void preinit(FMLPreInitializationEvent e) {
-	proxy.init(e);
+		proxy.preinit(e);
 	}
-	
 
 	@EventHandler
 	public static void init(FMLInitializationEvent e) {
 		EntityRegistry.registerModEntity(EntityPukeBall.class, "entitypukeball", 0, pukeball, 64, 1, true);
+		proxy.init(e);
 	}
 
 	@EventHandler
