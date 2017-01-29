@@ -1,8 +1,10 @@
 package alvin137.pukeball.entity;
 
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
+import alvin137.pukeball.ConfigManager;
 import alvin137.pukeball.NBTKeys;
 import alvin137.pukeball.PukeBall;
 import alvin137.pukeball.item.ItemPukeBall;
@@ -67,12 +69,15 @@ public class EntityPukeBall extends EntityThrowable {
 				PukeBall.logger.info(this.getEntityData().getCompoundTag(NBTKeys.KEY_ENTITY).getString("id"));
 			}
 		} else if (result.entityHit != null && result.entityHit.isEntityAlive() && classVerify(result.entityHit)) {
+			EntityLivingBase e = (EntityLivingBase)result.entityHit;
+			if(getCatchrate(e)){
 			ItemStack ball = new ItemStack(CommonProxy.ball);
 			ball.setTagCompound(new NBTTagCompound());
-			ball.getTagCompound().setTag(NBTKeys.KEY_ENTITY, result.entityHit.serializeNBT());
-			ball.getTagCompound().setString(NBTKeys.KEY_ENTITY_NAME, result.entityHit.getName());
+			ball.getTagCompound().setTag(NBTKeys.KEY_ENTITY, e.serializeNBT());
+			ball.getTagCompound().setString(NBTKeys.KEY_ENTITY_NAME, e.getName());
 			result.entityHit.entityDropItem(ball, 1);
 			result.entityHit.setDead();
+			}
 		}
 		// 이 구문은 한 블럭 내려가야 모든 상황에서 실행될 수 있겠죠. 안내려가면 몹한테 안 맞는 이상 안죽음.
 		if (!this.worldObj.isRemote)
@@ -85,5 +90,23 @@ public class EntityPukeBall extends EntityThrowable {
 	 */
 	public boolean classVerify(Entity entity) {
 		return entity instanceof EntityLiving && entity.isNonBoss();
+	}
+
+	public boolean getCatchrate(EntityLivingBase e) {
+		float ballbonus = 1.0F; // 추후수정
+		float statusbonus = 1.0F; // 추후수정
+		float a = (3 * e.getMaxHealth() - 2 * e.getHealth()) * ConfigManager.getConfig(e.getName()) * ballbonus / 3
+				* e.getMaxHealth() * statusbonus;
+		Random r = new Random();
+		PukeBall.logger.info("calculated" + a);
+		float c = r.nextInt(65535);
+		for (int i = 0; i < 4;) {
+			if (65536 / Math.pow((255 / a), 0.1875) < c) {
+				PukeBall.logger.info("Catching" + e.getName());
+				return true;
+			}
+		}
+		return false;
+
 	}
 }
