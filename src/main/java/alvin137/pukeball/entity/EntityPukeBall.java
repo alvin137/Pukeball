@@ -93,20 +93,22 @@ public class EntityPukeBall extends EntityThrowable {
 	}
 
 	public boolean getCatchrate(EntityLivingBase e) {
-		float ballbonus = 1.0F; // 추후수정
-		float statusbonus = 1.0F; // 추후수정
-		float a = (3 * e.getMaxHealth() - 2 * e.getHealth()) * ConfigManager.getConfig(e.getName()) * ballbonus / 3
-				* e.getMaxHealth() * statusbonus;
-		Random r = new Random();
+		double ballBonus = 1.0F; // 추후수정
+		double statusBonus = 1.0F; // 추후수정
+		double a = (((3 * e.getMaxHealth() - 2 * e.getHealth()) * ConfigManager.getConfig(e.getName()) * ballBonus) / 3*e.getMaxHealth()) * statusBonus;
 		PukeBall.logger.info("calculated" + a);
-		float c = r.nextInt(65535);
-		for (int i = 0; i < 4;) {
-			if (65536 / Math.pow((255 / a), 0.1875) < c) {
-				PukeBall.logger.info("Catching" + e.getName());
-				return true;
+		Random r = new Random();
+		for (int i = 0; i < 4; i++) {
+			if (65536 / Math.pow((255 / a), 0.1875) < r.nextInt(65536)) {	
+				PukeBall.logger.info("ASDFASDF");
+				return false;
+			}
+			else{
+				PukeBall.logger.info("moving");
 			}
 		}
-		return false;
+		PukeBall.logger.info("Catching" + e.getName());
+		return true;
 
 	}
 }
