@@ -1,8 +1,14 @@
 package alvin137.pukeball;
 
+import org.apache.logging.log4j.Logger;
+
 import alvin137.pukeball.entity.EntityPukeBall;
 import alvin137.pukeball.item.ItemPukeBall;
 import alvin137.pukeball.proxy.CommonProxy;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -26,8 +32,20 @@ public class PukeBall {
 	@SidedProxy(clientSide = "alvin137.pukeball.proxy.ClientProxy", serverSide = "alvin137.pukeball.proxy.CommonProxy")
 	public static CommonProxy proxy;
 
+	public static Logger logger;
+	public static CreativeTabs tabPukeBall = new CreativeTabs("PukeBall") {
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Item getTabIconItem() {
+			return CommonProxy.ball;
+		}
+	};
+
 	@EventHandler
 	public static void preinit(FMLPreInitializationEvent e) {
+		logger = e.getModLog();
+		Configuration config = new Configuration(e.getSuggestedConfigurationFile());
+		ConfigManager.setConfig(config);
 		proxy.preinit(e);
 	}
 

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter.Yellow;
 
 import alvin137.pukeball.NBTKeys;
+import alvin137.pukeball.PSoundEvents;
 import alvin137.pukeball.PukeBall;
 import alvin137.pukeball.entity.EntityPukeBall;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -32,6 +33,7 @@ public class ItemPukeBall extends Item {
 	public ItemPukeBall() {
 		setUnlocalizedName(name);
 		setRegistryName(PukeBall.MODID, name);
+		setCreativeTab(PukeBall.tabPukeBall);
 		GameRegistry.register(this);
 	}
 
@@ -43,8 +45,10 @@ public class ItemPukeBall extends Item {
 		}
 
 		worldIn.playSound((EntityPlayer) null, playerIn.posX, playerIn.posY, playerIn.posZ,
-				SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F,
-				0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+				PSoundEvents.BALL_THROWING, SoundCategory.NEUTRAL, 0.5F, 1F);
+				//0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+		// worldIn.playSound((EntityPlayer) null, playerIn.posX, playerIn.posY,
+		// playerIn.posZ, SoundEvents, pitch);
 
 		if (!worldIn.isRemote) {
 			EntityPukeBall entitypukeball = new EntityPukeBall(worldIn, playerIn);
@@ -63,7 +67,6 @@ public class ItemPukeBall extends Item {
 
 	public void initModel() {
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-		System.out.println("asdfff");
 	}
 
 	@Override

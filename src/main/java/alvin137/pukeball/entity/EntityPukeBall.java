@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import alvin137.pukeball.NBTKeys;
+import alvin137.pukeball.PukeBall;
 import alvin137.pukeball.item.ItemPukeBall;
 import alvin137.pukeball.proxy.CommonProxy;
 import net.minecraft.entity.Entity;
@@ -63,10 +64,7 @@ public class EntityPukeBall extends EntityThrowable {
 				e.setPosition(posX, posY, posZ);
 				e.setUniqueId(UUID.randomUUID());
 				this.worldObj.spawnEntityInWorld(e);
-				// 제가 원했던 디버깅 구문. 엔티티의 Id를 출력합니다. serializeNBT 보고 출력시켜주라 한거였는데
-				// ㅂㄷㅂㄷ ㅂㄷㅂㄷㅂㄷㅂㄷㅂㄷㅂㄷㅂㄷ. @see Entity#serializeNBT()
-				System.out.printf("mobspawn %s",
-						this.getEntityData().getCompoundTag(NBTKeys.KEY_ENTITY).getString("id"));
+				PukeBall.logger.info(this.getEntityData().getCompoundTag(NBTKeys.KEY_ENTITY).getString("id"));
 			}
 		} else if (result.entityHit != null && result.entityHit.isEntityAlive() && classVerify(result.entityHit)) {
 			ItemStack ball = new ItemStack(CommonProxy.ball);
