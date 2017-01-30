@@ -8,8 +8,10 @@ import alvin137.pukeball.NBTKeys;
 import alvin137.pukeball.PSoundEvents;
 import alvin137.pukeball.PukeBall;
 import alvin137.pukeball.entity.EntityPukeBall;
+import alvin137.pukeball.network.PukeMessage;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,6 +42,7 @@ public class ItemPukeBall extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn,
 			EnumHand hand) {
+		PukeBall.snw.sendTo(new PukeMessage(1), (EntityPlayerMP) playerIn);
 		if (!playerIn.capabilities.isCreativeMode) {
 			--itemStackIn.stackSize;
 		}

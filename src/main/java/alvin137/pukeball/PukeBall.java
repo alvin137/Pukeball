@@ -40,7 +40,7 @@ public class PukeBall {
 	public static CommonProxy proxy;
 	public static String configPath;
 	public static Logger logger;
-	public static SimpleNetworkWrapper snw = NetworkRegistry.INSTANCE.newSimpleChannel(MODID + ":network");
+	public static SimpleNetworkWrapper snw = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 	public static CreativeTabs tabPukeBall = new CreativeTabs("PukeBall") {
 		@Override
 		@SideOnly(Side.CLIENT)
@@ -52,15 +52,15 @@ public class PukeBall {
 	@EventHandler
 	public static void preinit(FMLPreInitializationEvent e) {
 		logger = e.getModLog();
-		int i=0;
-		snw.registerMessage(PukeMessageHandler.class, PukeMessage.class, i++, Side.CLIENT);
+	//	int i=0;
+		snw.registerMessage(PukeMessageHandler.class, PukeMessage.class, 0, Side.SERVER);
+		snw.registerMessage(PukeMessageHandler.class, PukeMessage.class, 1, Side.CLIENT);
 		configPath = e.getSuggestedConfigurationFile().getAbsolutePath();
 		proxy.preinit(e);
 	}
 
 	@EventHandler
 	public static void init(FMLInitializationEvent e) {
-
 		EntityRegistry.registerModEntity(EntityPukeBall.class, "entitypukeball", 0, pukeball, 64, 1, true);
 		proxy.init(e);
 	}
