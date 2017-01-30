@@ -6,6 +6,8 @@ import org.apache.logging.log4j.Logger;
 
 import alvin137.pukeball.entity.EntityPukeBall;
 import alvin137.pukeball.item.ItemPukeBall;
+import alvin137.pukeball.network.PukeMessage;
+import alvin137.pukeball.network.PukeMessageHandler;
 import alvin137.pukeball.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,6 +21,8 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,6 +40,7 @@ public class PukeBall {
 	public static CommonProxy proxy;
 	public static String configPath;
 	public static Logger logger;
+	public static SimpleNetworkWrapper snw = NetworkRegistry.INSTANCE.newSimpleChannel(MODID + ":network");
 	public static CreativeTabs tabPukeBall = new CreativeTabs("PukeBall") {
 		@Override
 		@SideOnly(Side.CLIENT)
@@ -47,6 +52,8 @@ public class PukeBall {
 	@EventHandler
 	public static void preinit(FMLPreInitializationEvent e) {
 		logger = e.getModLog();
+		int i=0;
+		snw.registerMessage(PukeMessageHandler.class, PukeMessage.class, i++, Side.CLIENT);
 		configPath = e.getSuggestedConfigurationFile().getAbsolutePath();
 		proxy.preinit(e);
 	}
