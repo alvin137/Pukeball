@@ -1,8 +1,12 @@
 package alvin137.pukeball.proxy;
 
+import java.util.List;
+
 import alvin137.pukeball.PukeBall;
 import alvin137.pukeball.entity.EntityPukeBall;
 import alvin137.pukeball.entity.RenderPukeBall;
+import alvin137.pukeball.item.ItemPukeBall;
+import alvin137.pukeball.item.RegisterItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -19,13 +23,15 @@ public class ClientProxy extends CommonProxy {
 	public void preinit(FMLPreInitializationEvent e) {
 		super.preinit(e);
 		OBJLoader.INSTANCE.addDomain(PukeBall.MODID);
-		ball.initModel();
+		RegisterItems.initModel();
 	}
 
 	@Override
 	public void init(FMLInitializationEvent e) {
+		List<ItemPukeBall> list = RegisterItems.list;
+		for(int i = 0; list.size() > i; i++)
 		Minecraft.getMinecraft().getRenderManager().entityRenderMap.put(EntityPukeBall.class,
-				new RenderPukeBall<Entity>(Minecraft.getMinecraft().getRenderManager(), ball,
+				new RenderPukeBall<Entity>(Minecraft.getMinecraft().getRenderManager(), list.get(i),
 						Minecraft.getMinecraft().getRenderItem()));
 
 	}

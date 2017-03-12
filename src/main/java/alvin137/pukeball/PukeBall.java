@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import alvin137.pukeball.entity.EntityPukeBall;
 import alvin137.pukeball.item.ItemPukeBall;
+import alvin137.pukeball.item.RegisterItems;
 import alvin137.pukeball.network.PukeMessage;
 import alvin137.pukeball.network.PukeMessageHandler;
 import alvin137.pukeball.proxy.CommonProxy;
@@ -45,7 +46,7 @@ public class PukeBall {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem() {
-			return CommonProxy.ball;
+			return RegisterItems.monsterball;
 		}
 	};
 

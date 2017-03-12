@@ -9,6 +9,7 @@ import alvin137.pukeball.PSoundEvents;
 import alvin137.pukeball.PukeBall;
 import alvin137.pukeball.entity.EntityPukeBall;
 import alvin137.pukeball.network.PukeMessage;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -29,32 +30,29 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemPukeBall extends Item {
-	public static String name = "pukeball";
-	public String info;
-
-	public ItemPukeBall() {
+	public static String name;
+	private double ballBonus;
+	public ItemPukeBall(String name, double ballBonus) {
 		setUnlocalizedName(name);
 		setRegistryName(PukeBall.MODID, name);
 		setCreativeTab(PukeBall.tabPukeBall);
+		this.ballBonus = ballBonus;	
 		GameRegistry.register(this);
+		RegisterItems.list.add(this);
 	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn,
 			EnumHand hand) {
-		PukeBall.snw.sendTo(new PukeMessage(1), (EntityPlayerMP) playerIn);
+		//PukeBall.snw.sendToAll(new PukeMessage(1));
 		if (!playerIn.capabilities.isCreativeMode) {
 			--itemStackIn.stackSize;
 		}
 
-		worldIn.playSound((EntityPlayer) null, playerIn.posX, playerIn.posY, playerIn.posZ,
-				PSoundEvents.BALL_THROWING, SoundCategory.NEUTRAL, 0.5F, 1F);
-				//0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-		// worldIn.playSound((EntityPlayer) null, playerIn.posX, playerIn.posY,
-		// playerIn.posZ, SoundEvents, pitch);
-
+		worldIn.playSound((EntityPlayer) null, playerIn.posX, playerIn.posY, playerIn.posZ, PSoundEvents.BALL_THROWING,
+				SoundCategory.NEUTRAL, 0.5F, 1F);
 		if (!worldIn.isRemote) {
-			EntityPukeBall entitypukeball = new EntityPukeBall(worldIn, playerIn);
+			EntityPukeBall entitypukeball = new EntityPukeBall(worldIn, playerIn, ballBonus, this);
 			entitypukeball.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F,
 					1.0F);
 			worldIn.spawnEntityInWorld(entitypukeball);
@@ -76,5 +74,9 @@ public class ItemPukeBall extends Item {
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean par4) {
 		if (itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey(NBTKeys.KEY_ENTITY_NAME, 8))
 			list.add(TextFormatting.YELLOW + itemstack.getTagCompound().getString(NBTKeys.KEY_ENTITY_NAME));
+	}
+	
+	public double getBallType() {
+		return this.ballBonus;
 	}
 }
