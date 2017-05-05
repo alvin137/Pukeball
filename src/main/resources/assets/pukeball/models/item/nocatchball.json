@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "pukeball:items/superball"
+        "layer0": "pukeball:items/monsterball"
     }
 }

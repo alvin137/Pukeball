@@ -10,12 +10,14 @@ public class RegisterItems {
 	public static ItemPukeBall superball;
 	public static ItemPukeBall hyperball;
 	public static ItemPukeBall masterball;
+	public static ItemPukeBall nocatchball;
 	public static List<ItemPukeBall> list = new ArrayList<ItemPukeBall>();
 	public static void registerItem() {
 		monsterball = new ItemPukeBall("monsterball", 1);
 		superball = new ItemPukeBall("superball", 1.1);
 		hyperball = new ItemPukeBall("hyperball", 1.3);
 		masterball = new ItemPukeBall("masterball", 255);
+		nocatchball = new ItemPukeBall("nocatchball", 0);
 	}
 	
 	public static void initModel() {
@@ -23,6 +25,7 @@ public class RegisterItems {
 		superball.initModel();
 		hyperball.initModel();
 		masterball.initModel();
+		nocatchball.initModel();
 	}
 	
 	public static ItemStack getPukeball(ItemPukeBall item) {
@@ -31,6 +34,7 @@ public class RegisterItems {
 		else if(a==1.1) return new ItemStack(superball);
 		else if (a==1.3) return new ItemStack(hyperball);
 		else if(a==255) return new ItemStack(masterball);
+		else if(a==0) return new ItemStack(nocatchball);
 		return null;	
 	}
 }

@@ -62,7 +62,11 @@ public class PukeBall {
 
 	@EventHandler
 	public static void init(FMLInitializationEvent e) {
-		EntityRegistry.registerModEntity(EntityPukeBall.class, "entitypukeball", 0, pukeball, 64, 1, true);
+		//EntityRegistry.registerModEntity(EntityPukeBall.class, "entitypukeball", 0, pukeball, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityPukeBall.class, "entitymonsterball", 0, pukeball, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityPukeBall.class, "entitysuperball", 1, pukeball, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityPukeBall.class, "entityhyperball", 2, pukeball, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityPukeBall.class, "entitymasterball", 3, pukeball, 64, 1, true);
 		proxy.init(e);
 	}
 

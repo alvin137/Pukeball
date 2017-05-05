@@ -147,7 +147,7 @@ public class EntityPukeBall extends EntityThrowable {
 	public boolean isCatchSuccess(EntityLivingBase e, int i) {
 		double statusBonus = 1, mhp = e.getMaxHealth(), hp = e.getHealth(),
 				a = ((3 * mhp - 2 * hp) * ConfigManager.getConfig(EntityList.getEntityString(e))) / (3 * mhp)
-						* statusBonus,
+						* statusBonus * ballBonus,
 				b = 65536 / Math.pow((255 / a), 0.1875);
 		if (b < e.getRNG().nextInt(65536)) {
 			PukeBall.logger.info(String.format(
