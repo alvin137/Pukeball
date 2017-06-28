@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter.Yellow;
 
-import alvin137.pukeball.NBTKeys;
+import alvin137.pukeball.NBTKEYS;
 import alvin137.pukeball.PSoundEvents;
 import alvin137.pukeball.PukeBall;
 import alvin137.pukeball.entity.EntityPukeBall;
@@ -42,11 +42,13 @@ public class ItemPukeBall extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn,
-			EnumHand hand) {
+	 public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
+	 {
+		ItemStack itemstack = playerIn.getHeldItem(handIn);
 		//PukeBall.snw.sendToAll(new PukeMessage(1));
 		if (!playerIn.capabilities.isCreativeMode) {
-			--itemStackIn.stackSize;
+			int size = itemstack.getCount();
+			itemstack.setCount(size--);
 		}
 
 		worldIn.playSound((EntityPlayer) null, playerIn.posX, playerIn.posY, playerIn.posZ, PSoundEvents.BALL_THROWING,
@@ -55,15 +57,15 @@ public class ItemPukeBall extends Item {
 			EntityPukeBall entitypukeball = new EntityPukeBall(worldIn, playerIn, ballBonus, this);
 			entitypukeball.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F,
 					1.0F);
-			worldIn.spawnEntityInWorld(entitypukeball);
-			NBTTagCompound nbt = itemStackIn.getTagCompound();
+			worldIn.spawnEntity(entitypukeball);
+			NBTTagCompound nbt = itemstack.getTagCompound();
 			if (nbt != null) {
-				entitypukeball.getEntityData().setTag(NBTKeys.KEY_ENTITY, nbt.getTag(NBTKeys.KEY_ENTITY));
+				entitypukeball.getEntityData().setTag(NBTKEYS.KEY_ENTITY, nbt.getTag(NBTKEYS.KEY_ENTITY));
 			}
 		}
 
 		playerIn.addStat(StatList.getObjectUseStats(this));
-		return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+		return new ActionResult(EnumActionResult.SUCCESS, itemstack);
 	}
 
 	public void initModel() {
@@ -72,8 +74,8 @@ public class ItemPukeBall extends Item {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean par4) {
-		if (itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey(NBTKeys.KEY_ENTITY_NAME, 8))
-			list.add(TextFormatting.YELLOW + itemstack.getTagCompound().getString(NBTKeys.KEY_ENTITY_NAME));
+		if (itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey(NBTKEYS.KEY_ENTITY_NAME, 8))
+			list.add(TextFormatting.YELLOW + itemstack.getTagCompound().getString(NBTKEYS.KEY_ENTITY_NAME));
 	}
 	
 	public double getBallType() {

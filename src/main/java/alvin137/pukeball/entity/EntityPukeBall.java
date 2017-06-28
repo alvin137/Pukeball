@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import alvin137.pukeball.ConfigManager;
-import alvin137.pukeball.NBTKeys;
+import alvin137.pukeball.NBTKEYS;
 import alvin137.pukeball.PukeBall;
 import alvin137.pukeball.item.ItemPukeBall;
 import alvin137.pukeball.item.RegisterItems;
@@ -90,15 +90,15 @@ public class EntityPukeBall extends EntityThrowable {
 	@Override
 	protected void onImpact(RayTraceResult result) {
 		
-		if (this.worldObj.isRemote) return;
-		else if (this.getEntityData().hasKey(NBTKeys.KEY_ENTITY)) {
-			Entity e = EntityList.createEntityFromNBT(this.getEntityData().getCompoundTag(NBTKeys.KEY_ENTITY),
-					this.worldObj);
+		if (this.world.isRemote) return;
+		else if (this.getEntityData().hasKey(NBTKEYS.KEY_ENTITY)) {
+			Entity e = EntityList.createEntityFromNBT(this.getEntityData().getCompoundTag(NBTKEYS.KEY_ENTITY),
+					this.world);
 			e.resetEntityId();
 			e.setPosition(posX, posY, posZ);
 			e.setUniqueId(UUID.randomUUID());
-			this.worldObj.spawnEntityInWorld(e);
-			PukeBall.logger.info(this.getEntityData().getCompoundTag(NBTKeys.KEY_ENTITY).getString("id"));
+			this.world.spawnEntity(e);
+			PukeBall.logger.info(this.getEntityData().getCompoundTag(NBTKEYS.KEY_ENTITY).getString("id"));
 		} else if (result.entityHit != null && result.entityHit.isEntityAlive() && classVerify(result.entityHit)) {
 			this.r = result;
 			isTouched = true;
@@ -110,8 +110,8 @@ public class EntityPukeBall extends EntityThrowable {
 	public void makePukeBall() {
 		ItemStack ball = RegisterItems.getPukeball(item);
 		ball.setTagCompound(new NBTTagCompound());
-		ball.getTagCompound().setTag(NBTKeys.KEY_ENTITY, this.r.entityHit.serializeNBT());
-		ball.getTagCompound().setString(NBTKeys.KEY_ENTITY_NAME, this.r.entityHit.getName());
+		ball.getTagCompound().setTag(NBTKEYS.KEY_ENTITY, this.r.entityHit.serializeNBT());
+		ball.getTagCompound().setString(NBTKEYS.KEY_ENTITY_NAME, this.r.entityHit.getName());
 		this.r.entityHit.entityDropItem(ball, 1);
 		this.r.entityHit.setDead();
 		this.setDead();
@@ -169,11 +169,11 @@ public class EntityPukeBall extends EntityThrowable {
 		this.getThrower().setRotationYawHead(180f);
 		PukeBall.snw.sendToAllAround(new PukeMessage(1), new TargetPoint(e.dimension, e.posX, e.posY, e.posZ, 10));
 		EntityLivingBase entitylivingbase = this.getThrower();
-		int i = MathHelper.floor_double(e.posX);
-		int j = MathHelper.floor_double(e.posY);
-		int k = MathHelper.floor_double(e.posZ);
+		int i = MathHelper.floor(e.posX);
+		int j = MathHelper.floor(e.posY);
+		int k = MathHelper.floor(e.posZ);
 		EntityLivingBase entity = (EntityLivingBase) EntityList.createEntityByName(EntityList.getEntityString(e),
-				this.worldObj);
+				this.world);
 
 		for (int l = 0; l < 50; ++l) {
 			int i1 = i + MathHelper.getRandomIntegerInRange(this.rand, 1, 10)
@@ -183,19 +183,19 @@ public class EntityPukeBall extends EntityThrowable {
 			int k1 = k + MathHelper.getRandomIntegerInRange(this.rand, 1, 10)
 					* MathHelper.getRandomIntegerInRange(this.rand, -1, 1);
 
-			if (this.worldObj.getBlockState(new BlockPos(i1, j1 - 1, k1)).isSideSolid(this.worldObj,
+			if (this.world.getBlockState(new BlockPos(i1, j1 - 1, k1)).isSideSolid(this.world,
 					new BlockPos(i1, j1 - 1, k1), net.minecraft.util.EnumFacing.UP)) {
 				entity.setPosition((double) i1, (double) j1, (double) k1);
 
-				if (!this.worldObj.isAnyPlayerWithinRangeAt((double) i1, (double) j1, (double) k1, 7.0D)
-						&& this.worldObj.checkNoEntityCollision(entity.getEntityBoundingBox(), entity)
-						&& this.worldObj.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty()
-						&& !this.worldObj.containsAnyLiquid(entity.getEntityBoundingBox())) {
-					e.worldObj.spawnEntityInWorld(entity);
+				if (!this.world.isAnyPlayerWithinRangeAt((double) i1, (double) j1, (double) k1, 7.0D)
+						&& this.world.checkNoEntityCollision(entity.getEntityBoundingBox(), entity)
+						&& this.world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty()
+						&& !this.world.containsAnyLiquid(entity.getEntityBoundingBox())) {
+					e.world.spawnEntity(entity);
 					PukeBall.logger.info("entity successfuly spawned");
 					if (entitylivingbase != null)
 						((EntityLiving) entity).setAttackTarget(entitylivingbase);
-					((EntityLiving) entity).onInitialSpawn(this.worldObj.getDifficultyForLocation(new BlockPos(entity)),
+					((EntityLiving) entity).onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entity)),
 							(IEntityLivingData) null);
 					break;
 				}

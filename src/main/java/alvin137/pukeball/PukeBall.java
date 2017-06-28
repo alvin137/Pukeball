@@ -45,8 +45,8 @@ public class PukeBall {
 	public static CreativeTabs tabPukeBall = new CreativeTabs("PukeBall") {
 		@Override
 		@SideOnly(Side.CLIENT)
-		public Item getTabIconItem() {
-			return RegisterItems.monsterball;
+		public ItemStack getTabIconItem() {
+			return new ItemStack(RegisterItems.monsterball);
 		}
 	};
 
